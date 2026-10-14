@@ -12,6 +12,7 @@ dependencies = ["requests>=2.31,<3"]
 
 [project.scripts]
 echo-discover = "echo_discovery.cli:main"
+echo-research = "echo_discovery.research_cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
