@@ -10,9 +10,12 @@ from .scoring import score_candidate
 
 def build_query(config: Config) -> str:
     query = config.query.strip()
-    # The explicit CLI/config value should override any stars qualifier in the base query.
-    if re.search(r"\\bstars:\\S+", query):
-        query = re.sub(r"\\bstars:\\S+", f"stars:>={config.min_stars}", query, count=1)
+    # The explicit CLI/config value overrides a stars qualifier in the base query.
+    if "stars:" in query:
+        start = query.index("stars:")
+        end = query.find(" ", start)
+        end = len(query) if end < 0 else end
+        query = query[:start] + f"stars:>={config.min_stars}" + query[end:]
     else:
         query += f" stars:>={config.min_stars}"
     if "pushed:<" not in query and config.inactive_days:
