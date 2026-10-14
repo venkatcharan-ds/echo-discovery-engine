@@ -9,7 +9,7 @@ from .scoring import score_candidate
 
 def build_query(config: Config) -> str:
     query = config.query.strip()
-    if f"stars:>" not in query:
+    if f"stars:>={config.min_stars}" not in query:
         query += f" stars:>={config.min_stars}"
     if "pushed:<" not in query and config.inactive_days:
         cutoff = (datetime.now(timezone.utc) - timedelta(days=config.inactive_days)).date().isoformat()
