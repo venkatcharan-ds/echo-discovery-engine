@@ -1,6 +1,5 @@
 """Search and normalize repository candidates."""
 from datetime import datetime, timedelta, timezone
-import re
 from typing import Any
 
 from .github_client import GitHubClient
