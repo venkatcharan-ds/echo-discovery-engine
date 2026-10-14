@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from typing import Any
 from .evidence import EvidenceCollector
 from .github_client import GitHubAPIError, GitHubClient
+from .research_client import ResearchGitHubClient
 from .report import build_research_report
 
 API = "https://api.github.com"
@@ -25,7 +26,7 @@ def research_repository(full_name: str, client: GitHubClient | None = None, now:
     if len(parts) != 2 or not all(parts):
         raise ValueError("Repository must use owner/name format, e.g. pallets/flask")
     root = f"{API}/repos/{parts[0]}/{parts[1]}"
-    client = client or GitHubClient()
+    client = client or ResearchGitHubClient()
     stamp = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
     evidence = EvidenceCollector(stamp)
     repo = client.get_json(root)
