@@ -42,6 +42,13 @@ def test_search_filters_forks_archives_and_sorts():
     assert "heuristic" in results[0].score_label
 
 
+def test_min_stars_is_applied_even_when_query_has_a_different_stars_filter():
+    from echo_discovery.search import build_query
+
+    query = build_query(Config(query="language:Python stars:>=50", min_stars=200))
+    assert "stars:>=200" in query
+
+
 def test_duplicate_repositories_are_removed():
     item = repo("org/project")
     client = FakeClient([[item, item]])
