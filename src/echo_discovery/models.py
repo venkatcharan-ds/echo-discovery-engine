@@ -5,7 +5,7 @@ from typing import Any
 
 @dataclass(frozen=True)
 class Config:
-    query: str = "language:Python stars:>50 pushed:<2023-01-01"
+    query: str = "language:Python"
     per_page: int = 30
     max_pages: int = 2
     min_stars: int = 50
