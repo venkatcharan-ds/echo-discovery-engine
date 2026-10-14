@@ -1,5 +1,5 @@
 """Search and normalize repository candidates."""
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from .github_client import GitHubClient
@@ -12,7 +12,7 @@ def build_query(config: Config) -> str:
     if f"stars:>" not in query:
         query += f" stars:>={config.min_stars}"
     if "pushed:<" not in query and config.inactive_days:
-        cutoff = datetime.now(timezone.utc).date().isoformat()
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=config.inactive_days)).date().isoformat()
         query += f" pushed:<{cutoff}"
     if not config.include_archived and "archived:" not in query:
         query += " archived:false"
