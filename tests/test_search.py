@@ -48,6 +48,7 @@ def test_min_stars_is_applied_even_when_query_has_a_different_stars_filter():
     query = build_query(Config(query="language:Python stars:>=50", min_stars=200))
     assert "stars:>=200" in query
     assert "stars:>=50" not in query
+    assert "stars:>=50" not in query
 
 
 def test_duplicate_repositories_are_removed():
