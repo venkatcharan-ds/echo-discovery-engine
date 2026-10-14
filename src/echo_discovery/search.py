@@ -1,5 +1,6 @@
 """Search and normalize repository candidates."""
 from datetime import datetime, timedelta, timezone
+import re
 from typing import Any
 
 from .github_client import GitHubClient
@@ -9,7 +10,10 @@ from .scoring import score_candidate
 
 def build_query(config: Config) -> str:
     query = config.query.strip()
-    if f"stars:>={config.min_stars}" not in query:
+    # The explicit CLI/config value should override any stars qualifier in the base query.
+    if re.search(r"\\bstars:\\S+", query):
+        query = re.sub(r"\\bstars:\\S+", f"stars:>={config.min_stars}", query, count=1)
+    else:
         query += f" stars:>={config.min_stars}"
     if "pushed:<" not in query and config.inactive_days:
         cutoff = (datetime.now(timezone.utc) - timedelta(days=config.inactive_days)).date().isoformat()
